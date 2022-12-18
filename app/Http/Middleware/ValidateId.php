@@ -18,7 +18,7 @@ class ValidateId
     {
         $id = $request->id;
 
-        if(!is_numeric($id) || $id<0){
+        if(!is_numeric($id) || $id<=0){
             return response('Id invalido',422);
         }
         return $next($request);
