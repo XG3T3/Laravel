@@ -14,9 +14,15 @@ class LoginController extends Controller
     {
 
 
-        
+     
 
         if (!Auth::guard('sanctum')->check()) {
+
+            $data = $request->validate([
+                'email' => 'required|email:rfc',
+                'password' => 'required'
+            ]);
+            
             if (Auth::attempt($data)) {
 
                 $response = [
@@ -28,21 +34,16 @@ class LoginController extends Controller
                 return response($response, 200);
             }
 
-            $data = $request->validate([
-                'email' => 'required|email:rfc',
-                'password' => 'required'
-            ]);
-
             $response = [
-                "success" => true,
+                "success" => false,
                 "message" => "Failed password or user",
                 "data" => null
             ];
 
-            return response($response, 200);
+            return response($response, 400);
         } else {
             $response = [
-                "success" => true,
+                "success" => false,
                 "message" => "You have already logged",
                 "data" => null
             ];

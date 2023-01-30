@@ -29,7 +29,7 @@ Route::post('/login',[LoginController::class,'login']);
 Route::get('/free',[LoginController::class,'freeAccess']);
 
 
-Route::middleware('loged')->post('/logout',[LoginController::class,'logout']);
+Route::middleware('loged')->get('/logout',[LoginController::class,'logout']);
 
 Route::middleware('loged')->get('/me',[LoginController::class,'whoAmI']);
 
