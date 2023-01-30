@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Expr\FuncCall;
 
 class LoginController extends Controller
 {
@@ -12,76 +13,87 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
-    
-            $data=$request->validate([
-                'email'=>'required|email:rfc',
-                'password' => 'required'
-               ]);
 
-        if(!Auth::guard('sanctum')->check())
-        {
-            if (Auth::attempt($data)){
-                return Auth::user()->createToken("token");
+        
+
+        if (!Auth::guard('sanctum')->check()) {
+            if (Auth::attempt($data)) {
+
+                $response = [
+                    "success" => true,
+                    "message" => "Logged",
+                    "data" => Auth::user()->createToken("token")->plainTextToken,
+                ];
+
+                return response($response, 200);
             }
 
-            $response=[
+            $data = $request->validate([
+                'email' => 'required|email:rfc',
+                'password' => 'required'
+            ]);
+
+            $response = [
                 "success" => true,
                 "message" => "Failed password or user",
                 "data" => null
             ];
 
-            return response($response,200);
-    
-            
-    
-        }
-
-        else{
-            $response=[
+            return response($response, 200);
+        } else {
+            $response = [
                 "success" => true,
                 "message" => "You have already logged",
                 "data" => null
             ];
 
-            
-            return response($response,200);
-        }
 
-        
-      
+            return response($response, 200);
+        }
     }
 
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
 
 
         Auth::guard('sanctum')->user()->tokens()->delete();
 
 
-        $response=[
+        $response = [
             "success" => true,
             "message" => "Logout",
             "data" => null
         ];
 
-        
-        return response($response,200);
+
+        return response($response, 200);
     }
 
 
-    public function whoAmI(Request $request){
+    public function whoAmI(Request $request)
+    {
 
-        
 
-        $response=[
+
+        $response = [
             "success" => true,
             "message" => "User Info",
             "data" => Auth::guard('sanctum')->user()
         ];
 
-        
-        return response($response,200);
 
+        return response($response, 200);
+    }
 
+    public function freeAccess(Request $request)
+    {
+        $response = [
+            "success" => true,
+            "message" => "It's FreeAccess my friend",
+            "data" => null,
+        ];
+
+        return response($response, 200);
     }
 }

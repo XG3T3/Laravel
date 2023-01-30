@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StudentController;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +22,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('/students')->group(function () {
+
+
+Route::post('/login',[LoginController::class,'login']);
+
+Route::get('/free',[LoginController::class,'freeAccess']);
+
+
+Route::middleware('loged')->post('/logout',[LoginController::class,'logout']);
+
+Route::middleware('loged')->get('/me',[LoginController::class,'whoAmI']);
+
+
+
+Route::prefix('/students')->middleware('loged')->group(function () {
 
     Route::get('',[StudentController::class,'getAll']);
 
@@ -33,3 +48,5 @@ Route::prefix('/students')->group(function () {
     Route::middleware('validaId')->patch('/{id}',[StudentController::class,'update']);
 
 });
+
+
