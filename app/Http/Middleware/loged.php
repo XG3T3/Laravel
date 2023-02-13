@@ -20,7 +20,7 @@ class loged
     {
 
 
-        if(!(Auth::guard('sanctum')->check())){
+        if(!Auth::guard('api')->check()){
 
             $response=[
                 "success" => false,

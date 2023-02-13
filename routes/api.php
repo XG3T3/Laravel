@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -31,11 +31,14 @@ Route::get('/free',[LoginController::class,'freeAccess']);
 
 Route::middleware('loged')->get('/logout',[LoginController::class,'logout']);
 
+
+Route::post('/create',[LoginController::class,'crearUser']);
+
 Route::middleware('loged')->get('/me',[LoginController::class,'whoAmI']);
 
 
 
-Route::prefix('/students')->middleware('loged')->group(function () {
+Route::prefix('/students')->middleware('auth:api')->group(function () {
 
     Route::get('',[StudentController::class,'getAll']);
 
