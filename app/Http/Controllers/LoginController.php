@@ -142,6 +142,8 @@ class LoginController extends Controller
 
     public function create(Request $request){
         
+
+        
         User::create( $request->validate([
                 'name' => "required | string",
                 'email' => "required | email:rfc | unique:users",
@@ -155,7 +157,8 @@ class LoginController extends Controller
     {
         try{
 
-        
+            if (!Auth::guard('api')->check()){
+           
 
             $request->validate([
                 'name' => "required | string",
@@ -180,6 +183,20 @@ class LoginController extends Controller
 
             return response($response,201);
         }
+
+        else{
+            $response = [
+                "success" => false,
+                "message" => "You have already logged",
+                "data" => null
+            ];
+
+
+            return response($response, 200);
+
+        };
+        }
+        
         catch(PDOException $ex){
             return response($ex->errorInfo,500);
         }
